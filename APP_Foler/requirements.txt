@@ -4,6 +4,6 @@ seaborn == 0.12.0
 matplotlib == 3.5.3
 sklearn == 0.0
 ast == 0.0.2
-warnings == 0.1.0
-flask == 2.2.2
+warn == 0.1.0
+Flask == 2.2.2
 pickle5 == 0.0.12

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+
+<style>
+body {font-family: Arial, Helvetica, sans-serif;}
+form {border: 3px solid #f1f1f1;}
+
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+button {
+  background-color: #6a5acd;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+.cancelbtn {
+  width: auto;
+  padding: 10px 18px;
+  background-color: #f44336;
+}
+
+.imgcontainer {
+  text-align: center;
+  margin: 24px 0 12px 0;
+}
+
+img.avatar {
+  width: 40%;
+  border-radius: 50%;
+}
+
+.container {
+  padding: 16px;
+}
+
+span.psw {
+  float: right;
+  padding-top: 16px;
+}
+.Half {
+display: inline;
+width: 50%;
+float: left;
+}
+
+.remain {
+display: inline;
+width: 50%;
+float: right;
+}
+.buttonstyle {
+  background-color: #6a5acd;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: auto;
+}
+
+.ress{
+  background-color: #e94c4c;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 40%;
+
+}
+div.scroll {
+    width: auto;
+    height: 50%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    text-align: center;
+    padding: 20px;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+  span.psw {
+     display: block;
+     float: none;
+  }
+  .cancelbtn {
+     width: 100%;
+  }
+}
+</style>
+</head>
+<div>
+<div class="Half">
+<body>
+
+<center><h2>Cholesterol Level Calculator</h2></center>
+
+<form action="javascript:void(0);" method="post">
+  <div class="imgcontainer">
+    <img src="static/images/heart_disease.jpg" alt="Avatar" class="avatar">
+  </div>
+
+  <div class="container">
+    <label for="uname"><b>Enter Weight in Pounds</b></label>
+    <input type="text" id="mywei" placeholder="Weight in pounds" name="uname" required>
+
+    <label for="psw"><b>Enter BMI index</b></label>
+    <input type="text" id="mybmi" placeholder="BMI index" name="psw" required>
+        
+    <button type="submit" id = "getchol"><b>Get Cholesterol Level</b></button>
+  <center><div style='display:none;' id='business'>The Cholesterol level for given weight and bmi is:</div></center>
+    <center><div id="clickme"></div></center>
+
+
+
+    
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+    </script>
+    <script>
+        $(document).ready(function(){
+            $('#getchol').on('click', function() {
+              
+                $("#business").show();
+
+              
+            });
+        });            
+        </script>
+
+
+<script>
+
+  $(document).ready(function(){
+        
+    $('#getchol').on('click', function() {
+        
+      var wgt = document.getElementById("mywei").value;
+      var bm = document.getElementById("mybmi").value;
+          
+          
+          $("#clickme").text("Calling Server");
+         
+  
+          $.ajax({
+            url: "/results",
+            type: "get",
+            data: {weight: wgt, bmi:bm},
+            success: function(response) {
+              $("#clickme").html(response["ans"]);
+              $("#clickme").addClass("ress");
+              $("#business").html(response["texts"])
+            },
+            error: function(xhr) {
+              //Do Something to handle error
+            }
+          });
+          
+      });
+  });
+  </script>
+   
+    
+
+
+
+
+
+
+  </div>
+
+  
+<!--
+  <div class="container" style="background-color:#f1f1f1">
+    <button type="button" class="cancelbtn">Cancel</button>
+    <span class="psw">Forgot <a href="#">password?</a></span>
+  </div>
+-->
+</form>
+
+
+</body>
+</div>
+<div class="Half">
+    <br><br>
+<center>
+    <b class="buttonstyle">Please upload csv file or excel file of Weight and BMI with header</b>
+    <br><br>
+    
+    <form action="javascript:void(0);" method=post enctype=multipart/form-data>
+        <input type=file id="myFile" name=file><br>
+        <div class="row"><input id="filesubmit" type=submit value=Upload></div>
+    </form>
+
+    <center><div  style="overflow-y:scroll; height:550px" id="clickme2"></div></center>
+    <!--<center><div class="scroll" id="clickme2"></div></center>-->
+
+    <script>
+
+        $(document).ready(function(){
+              
+          $('#filesubmit').on('click', function() {
+
+            var flname = document.getElementById("myFile").files[0].name;
+                
+                
+                $("#clickme2").text("Calling Server");
+               
+        
+                $.ajax({
+                  url: "/csvout",
+                  type: "get",
+                  data: {fname: flname},
+                  success: function(response) {
+                    //$("#clickme2").html(response);
+                    $('#clickme2').html(response);
+
+                  },
+                  error: function(xhr) {
+                    //Do Something to handle error
+                  }
+                });
+                
+            });
+        });
+        </script>
+         
+
+
+</div>
+</html>
